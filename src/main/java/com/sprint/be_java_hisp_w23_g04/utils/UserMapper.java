@@ -1,6 +1,8 @@
 package com.sprint.be_java_hisp_w23_g04.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sprint.be_java_hisp_w23_g04.dto.DBUserDTO;
+import com.sprint.be_java_hisp_w23_g04.dto.request.CreateUserDTO;
 import com.sprint.be_java_hisp_w23_g04.dto.request.PostDTO;
 import com.sprint.be_java_hisp_w23_g04.dto.response.PostResponseDTO;
 import com.sprint.be_java_hisp_w23_g04.dto.response.ProductDTO;
@@ -33,13 +35,14 @@ public class UserMapper {
             followers = userDto.getFollowers().stream().map(p -> new User(p.getId(), p.getName())).collect(Collectors.toList());
         }
 
-        List<Post> posts = postsDto.stream().map(p -> new Post(p.getPostId(), p.getDate(), mapProduct(p.getProduct()), p.getCategory(), p.getPrice())).collect(Collectors.toList());
+        List<Post> posts = postsDto.stream().map(p -> new Post(p.getPostId(),
+                p.getDate(), mapProduct(p.getProduct()), p.getCategory(), p.getPrice(),p.isHasPromo(),p.getDiscount())).collect(Collectors.toList());
         return new User(userDto.getUser_id(), userDto.getName(), posts, followed, followers);
     }
 
     public static UserDTO mapUser(User user) {
         List<PostResponseDTO> postResponseDTOS = user.getPosts().stream()
-                .map(p -> new PostResponseDTO(user.getId(), p.getId(), p.getDate(), mapProduct(p.getProduct()), p.getCategory(), p.getPrice())).toList();
+                .map(p -> new PostResponseDTO(user.getId(), p.getId(), p.getDate(), mapProduct(p.getProduct()), p.getCategory(), p.getPrice(), p.isHasPromo(),p.getDiscount())).toList();
         List<UserFollowDTO> followedDTOS = user.getFollowed().stream().map(
                 p -> new UserFollowDTO(p.getId(), p.getName())).toList();
         List<UserFollowDTO> followersDTOS = user.getFollowers().stream().map(
@@ -58,11 +61,22 @@ public class UserMapper {
     }
 
     public static Post mapPost(PostDTO post, int postId) {
-        return new Post(postId, post.getDate(), mapProduct(post.getProduct()), post.getCategory(), post.getPrice());
+        return new Post(postId,
+                post.getDate(),
+                mapProduct(post.getProduct()),
+                post.getCategory(),
+                post.getPrice(),
+                post.isHasPromo(),
+                post.getDiscount());
     }
 
     public static UserFollowDTO mapUserFollow(User user) {
         return new UserFollowDTO(user.getId(), user.getName());
+    }
+
+    public static User mapUserToCreate(CreateUserDTO userDTO){
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.convertValue(userDTO, User.class);
     }
 
 }

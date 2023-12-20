@@ -1,5 +1,6 @@
 package com.sprint.be_java_hisp_w23_g04.service;
 
+import com.sprint.be_java_hisp_w23_g04.dto.request.CreateUserDTO;
 import com.sprint.be_java_hisp_w23_g04.dto.request.PostDTO;
 import com.sprint.be_java_hisp_w23_g04.dto.response.*;
 
@@ -21,4 +22,8 @@ public interface ISocialMediaService {
     SimpleMessageDTO unfollowUser(int userId, int unfollowId);
 
     FilteredPostsDTO getFilteredPosts(int userId, String order);
+
+    CountPromoPostResponseDTO countPomoPostByUserId(int userId);
+
+    CreatedUserResponseDTO createUser(CreateUserDTO user);
 }
