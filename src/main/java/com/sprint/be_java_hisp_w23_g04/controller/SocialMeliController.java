@@ -1,6 +1,8 @@
 package com.sprint.be_java_hisp_w23_g04.controller;
 
+import com.sprint.be_java_hisp_w23_g04.dto.request.CreateUserDTO;
 import com.sprint.be_java_hisp_w23_g04.dto.request.PostDTO;
+import com.sprint.be_java_hisp_w23_g04.dto.response.UserDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -55,5 +57,20 @@ public class SocialMeliController {
     @GetMapping("/products/followed/{userId}/list")
     public ResponseEntity<?> getFilteredPost(@PathVariable int userId,@RequestParam(defaultValue = "date_asc") String order){
         return new ResponseEntity<>(socialMediaService.getFilteredPosts(userId,order), HttpStatus.OK);
+    }
+
+    @PostMapping("/products/promo-post")
+    public ResponseEntity<?> savePromoPost(@RequestBody PostDTO post){
+        return new ResponseEntity<>(socialMediaService.savePost(post), HttpStatus.OK);
+    }
+
+    @GetMapping("/products/promo-post/count")
+    public ResponseEntity<?> countPomoPostByUserId(@RequestParam(name = "user_id") int userId){
+        return new ResponseEntity<>(socialMediaService.countPomoPostByUserId(userId), HttpStatus.OK);
+    }
+
+    @PostMapping("/users/create")
+    public ResponseEntity<?> createUser(@RequestBody CreateUserDTO user){
+        return new ResponseEntity<>(socialMediaService.createUser(user),HttpStatus.CREATED);
     }
 }

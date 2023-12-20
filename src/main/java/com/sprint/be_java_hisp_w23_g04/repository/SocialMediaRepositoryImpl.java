@@ -74,16 +74,15 @@ public class SocialMediaRepositoryImpl implements ISocialMediaRepository {
     }
 
     public void unfollowUser(int userId, int unfollowedUserId) {
-        List<User> newFollowed = findUser(userId).getFollowed().stream().filter(user -> user.getId() != unfollowedUserId).toList();
-        List<User> newFollowers = findUser(unfollowedUserId).getFollowers().stream().filter(user -> user.getId() != userId).toList();
+        findUser(userId).getFollowed().removeIf(user1 -> user1.getId()==unfollowedUserId);
+        findUser(unfollowedUserId).getFollowers().removeIf(user1 -> user1.getId()==userId);
+    }
 
-        User user = findUser(userId);
-        User unfollowedUser = findUser(unfollowedUserId);
+    public int getNextUserId(){
+        return this.users.size() + 1;
+    }
 
-        unfollowedUser.setFollowers(newFollowers);
-        user.setFollowed(newFollowed);
-
-        users.set(users.indexOf(findUser(userId)), user);
-        users.set(users.indexOf(findUser(unfollowedUserId)), unfollowedUser);
+    public void saveUser(User user){
+        this.users.add(user);
     }
 }

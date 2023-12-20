@@ -1,5 +1,7 @@
 package com.sprint.be_java_hisp_w23_g04.utils;
 
+import com.sprint.be_java_hisp_w23_g04.dto.request.CreateUserDTO;
+import com.sprint.be_java_hisp_w23_g04.dto.request.PostDTO;
 import com.sprint.be_java_hisp_w23_g04.entity.User;
 import com.sprint.be_java_hisp_w23_g04.exception.BadRequestException;
 import com.sprint.be_java_hisp_w23_g04.exception.NoContentException;
@@ -7,6 +9,7 @@ import com.sprint.be_java_hisp_w23_g04.exception.NotFoundException;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class Verifications {
 
@@ -37,7 +40,11 @@ public class Verifications {
         }
     }
     private static boolean userAlreadyFollowsSeller(User user, User seller) {
-        return user.getFollowed().contains(seller);
+        Optional<User> userSeller =  user.getFollowed().stream()
+                .filter(u -> Objects.equals(u.getId(), seller.getId()))
+                .findFirst();
+
+        return userSeller.isPresent();
     }
 
     public static void verifyUserIsFollowed(User user, User unfollowedUser) {
@@ -69,6 +76,13 @@ public class Verifications {
     public static void validateEmptyResponseList(List<?> list) {
         if(list.isEmpty()){
             throw new NoContentException();
+        }
+    }
+
+    public static void validateUserName(CreateUserDTO userDTO) {
+        String name = userDTO.getName();
+        if(name == null || name.isEmpty()){
+            throw new BadRequestException("Nombre de usuario inválido");
         }
     }
 }

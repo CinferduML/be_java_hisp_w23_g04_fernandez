@@ -15,6 +15,8 @@ public class PostMapper {
                 post.getDate(),
                 productDTO,
                 post.getCategory(),
-                post.getPrice());
+                post.getPrice(),
+                post.isHasPromo(),
+                post.getDiscount());
     }
 }

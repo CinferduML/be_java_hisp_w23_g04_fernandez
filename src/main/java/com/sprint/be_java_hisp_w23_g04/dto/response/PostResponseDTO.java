@@ -13,8 +13,8 @@ public class PostResponseDTO extends PostDTO {
     @JsonProperty("post_id")
     private int postId;
 
-    public PostResponseDTO(int userId, int postId, LocalDate date, ProductDTO product, int category, double price) {
-        super(userId, date, product, category, price);
+    public PostResponseDTO(int userId, int postId, LocalDate date, ProductDTO product, int category, double price, boolean hasPromo, float discount) {
+        super(userId, date, product, category, price,hasPromo,discount);
         this.postId = postId;
     }
 }
